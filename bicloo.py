@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import codecs
 import requests
 
 
@@ -110,7 +111,13 @@ bicloo_stations = {
 }
 
 
-def bicloo(station, key):
+def read_credentials():
+    with codecs.open('.bicloo_credentials', 'r', 'utf8') as fh:
+        return fh.read().strip()
+
+
+def bicloo(station):
+    key = read_credentials()
     if station == 'help':
         return bicloo_help()
     if station not in bicloo_stations:

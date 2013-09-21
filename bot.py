@@ -7,8 +7,8 @@ Run this script with one argument, the channel :
     $ ./bot.py ##atal
 """
 
-import bicloo
-import ics
+from bicloo import bicloo
+from ics import ics
 import re
 import sys
 from twisted.internet import protocol
@@ -30,11 +30,8 @@ class Atalatchatche(irc.IRCClient):
     pattern = re.compile(u'^# *')
     nickname = 'atalatchatche'
 
-    def __init__(self, channel, ics_login, ics_password, bicloo_key):
+    def __init__(self, channel):
         self.channel = channel
-        self.ics_login = ics_login
-        self.ics_password = ics_password
-        self.bicloo_key = bicloo_key
 
     # callbacks for events
     def signedOn(self):
@@ -62,19 +59,30 @@ class Atalatchatche(irc.IRCClient):
                 return
             else:
                 function = split[0]
-                if function == 'bow':
+                if function in ['help', 'h4lp']:
+                    self.msg(self.channel,
+                             ("Je comprends les commandes:\n"
+                              "- bow :           je fais la carpette\n"
+                              "- bicloo station: je donne des infos "
+                              "sur la station donnée en arg "
+                              "(lowercase et sans accent). Liste des "
+                              "stations dispo ici: "
+                              "http://www.bicloo.nantesmetropole.fr"
+                              "/Les-stations/Plan-des-stations-en-PDF"
+                              "/Consultez-le-plan\n"
+                              "- cours :         je donne des infos "
+                              "sur le prochain cours qui aura lieu"))
+                elif function == 'bow':
                     self.describe(self.channel, "s'incline")
                 elif function == 'bicloo':
                     if len(split) < 2:
-                        split += 'help'
+                        self.msg(self.channel,
+                                 "j'ai besoin d'un nom de station ;(")
+                        return
                     station = split[1]
-                    self.msg(self.channel,
-                             bicloo.bicloo(station,
-                                           self.bicloo_key))
+                    self.msg(self.channel, bicloo(station))
                 elif function == 'cours':
-                    self.msg(self.channel,
-                             ics.ics(self.ics_login,
-                                     self.ics_password))
+                    self.msg(self.channel, ics())
 
     # irc callbacks
     def alterCollidedNick(self, nickname):
@@ -92,17 +100,11 @@ class BotFactory(protocol.ClientFactory):
     A new protocol instance will be created each time we connect to the server.
     """
 
-    def __init__(self, channel, ics_login, ics_password, bicloo_key):
+    def __init__(self, channel):
         self.channel = channel
-        self.ics_login = ics_login
-        self.ics_password = ics_password
-        self.bicloo_key = bicloo_key
 
     def buildProtocol(self, addr):
-        p = Atalatchatche(self.channel,
-                          self.ics_login,
-                          self.ics_password,
-                          self.bicloo_key)
+        p = Atalatchatche(self.channel)
         p.factory = self
         return p
 
@@ -117,7 +119,7 @@ class BotFactory(protocol.ClientFactory):
 
 if __name__ == '__main__':
     # create factory protocol and application
-    f = BotFactory(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    f = BotFactory(sys.argv[1])
 
     # connect factory to this host and port
     reactor.connectTCP("irc.freenode.net", 6667, f)

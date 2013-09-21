@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import codecs
 from datetime import datetime
 from icalendar import Calendar
 import pytz
@@ -8,7 +9,14 @@ from pytz import utc
 import requests
 
 
-def ics(login, pw):
+def read_credentials():
+    with codecs.open('.ics_credentials', 'r', 'utf8') as fh:
+        data = fh.read().strip().split('	')
+        return data[0], data[1]
+
+
+def ics():
+    login, pw = read_credentials()
     request = requests.get(
         'https://edt.univ-nantes.fr/sciences/g78125.ics',
         auth=(login, pw))
