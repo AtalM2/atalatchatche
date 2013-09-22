@@ -26,7 +26,7 @@ def ics():
     now = datetime.utcnow().strftime(format)
     paris = pytz.timezone('Europe/Paris')
     current = '99991231T235959Z'
-    dtstart = dtend = description = location = ''
+    dtstart = dtend = description = ''
     for component in Calendar.from_ical(request.text).walk():
         if component.name == 'VEVENT':
             current_start = component.get('DTSTART').to_ical()
@@ -37,16 +37,13 @@ def ics():
                 description = unicode(component.get('DESCRIPTION'))
                 start = component.get('DTSTART').to_ical()
                 end = component.get('DTEND').to_ical()
-                location = unicode(component.get('LOCATION'))
     dtutcstart = utc.localize(datetime.strptime(start, format))
     dtutcend = utc.localize(datetime.strptime(end, format))
     dtstart = dtutcstart.astimezone(paris)
     dtend = dtutcend.astimezone(paris)
-    return (u"Prochain cours  - le {date} de {start} à {end}\n"
-            "Salle           - {location}\n"
-            "Description     - {description}").format(
-        date=dtstart.strftime("%d/%m/%Y"),
+    return (u"Prochain cours le {date} de {start} à {end} :\n"
+            "{description}").format(
+        date=dtstart.strftime("%A %d/%m/%Y"),
         start=dtstart.strftime("%Hh%M"),
         end=dtend.strftime("%Hh%M"),
-        location=location,
         description=description).encode('utf8').strip()
