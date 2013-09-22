@@ -17,8 +17,7 @@ def read_credentials():
 
 
 def ics():
-    previous_locale = locale.getlocale()
-    locale.setlocale(locale.LC_ALL, 'fr_FR')
+    locale.setlocale(locale.LC_ALL, 'fr_FR.utf8')
     login, pw = read_credentials()
     request = requests.get(
         'https://edt.univ-nantes.fr/sciences/g78125.ics',
@@ -50,7 +49,6 @@ def ics():
         start=dtstart.strftime("%Hh%M"),
         end=dtend.strftime("%Hh%M"),
         description=description).encode('utf8').strip()
-    locale.setlocale(locale.LC_ALL, previous_locale)
     return result
 
 
