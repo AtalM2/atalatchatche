@@ -8,6 +8,7 @@ Run this script with one argument, the channel :
 """
 
 from bicloo import bicloo
+from fortune_teller import fortune_teller
 from ics import ics
 import re
 import sys
@@ -62,16 +63,19 @@ class Atalatchatche(irc.IRCClient):
                 if function in ['help', 'h4lp']:
                     self.msg(self.channel,
                              ("Je comprends les commandes:\n"
-                              "- bow :           je fais la carpette\n"
-                              "- bicloo station: je donne des infos "
+                              "- bow :            je fais la carpette\n"
+                              "- bicloo station : je donne des infos "
                               "sur la station donnée en arg "
                               "(lowercase et sans accent). Liste des "
-                              "stations dispo ici: "
+                              "stations dispo ici : "
                               "http://www.bicloo.nantesmetropole.fr"
                               "/Les-stations/Plan-des-stations-en-PDF"
                               "/Consultez-le-plan\n"
-                              "- cours :         je donne des infos "
-                              "sur le prochain cours qui aura lieu"))
+                              "- cours :          je donne des infos "
+                              "sur le prochain cours qui aura lieu\n"
+                              "- shine :          je vous éblouis "
+                              "en racontant des trucs super "
+                              "intéressants"))
                 elif function == 'bow':
                     self.describe(self.channel, "s'incline")
                 elif function == 'bicloo':
@@ -83,6 +87,8 @@ class Atalatchatche(irc.IRCClient):
                     self.msg(self.channel, bicloo(station))
                 elif function == 'cours':
                     self.msg(self.channel, ics())
+                elif function == 'shine':
+                    self.msg(self.channel, fortune_teller())
 
     # irc callbacks
     def alterCollidedNick(self, nickname):
