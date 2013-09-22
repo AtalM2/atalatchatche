@@ -128,19 +128,27 @@ def bicloo(station):
             key=key)
     request = requests.get(request_string)
     data = request.json()
-    return ("Ouverte: {status}\n"
-            "Bonus: {bonus}\n"
-            "CB: {cb}\n"
-            "Vélos disponibles: {bikes}\n"
-            "Emplacements disponibles: {stands}").format(
-        status='oui' if data['status'] == 'OPEN' else 'non',
-        bonus='oui' if data['bonus'] else 'non',
-        cb='oui' if data['banking'] else 'non',
-        bikes=data['available_bikes'],
-        stands=data['available_bike_stands'])
+    try:
+        result = ("Ouverte: {status}\n"
+                  "Bonus: {bonus}\n"
+                  "CB: {cb}\n"
+                  "Vélos disponibles: {bikes}\n"
+                  "Emplacements disponibles: {stands}").format(
+            status='oui' if data['status'] == 'OPEN' else 'non',
+            bonus='oui' if data['bonus'] else 'non',
+            cb='oui' if data['banking'] else 'non',
+            bikes=data['available_bikes'],
+            stands=data['available_bike_stands'])
+    except:
+        result = 'Réponse incomplète. J\'peux pas aider :(('
+    return result
 
 
 def bicloo_help():
     return ("# bicloo station où station est le nom "
             "de la station qui t'intéresse. Le nom est "
             "standardisé (lowercase pas d'accent).")
+
+
+
+
