@@ -122,7 +122,7 @@ def bicloo(station):
         return bicloo_help()
     if station not in bicloo_stations:
         return "je ne connais pas cette station."
-    request_string = 'https://api.jcdecaux.com/vls/v1/stations/' \
+    request_string = u'https://api.jcdecaux.com/vls/v1/stations/' \
         + '{station_number}?contract=Nantes&apiKey={key}'.format(
             station_number=bicloo_stations[station],
             key=key)
