@@ -12,6 +12,7 @@ from fortune_teller import fortune_teller
 from ics import ics
 import re
 import sys
+from tan import tan
 from twisted.internet import protocol
 from twisted.internet import reactor
 from twisted.words.protocols import irc
@@ -66,6 +67,8 @@ class Atalatchatche(irc.IRCClient):
                               "- bow :            je fais la carpette\n"
                               "- bicloo station : je donne des infos "
                               "sur la station donnée en arg "
+                              "- tan station : je donne des infos "
+                              "sur la station donnée en arg "
                               "(lowercase et sans accent). Liste des "
                               "stations dispo ici : "
                               "http://www.bicloo.nantesmetropole.fr"
@@ -85,6 +88,13 @@ class Atalatchatche(irc.IRCClient):
                         return
                     station = split[1]
                     self.msg(self.channel, bicloo(station))
+                elif function == 'tan':
+                    if len(split) < 2:
+                        self.msg(self.channel,
+                                 "j'ai besoin d'un nom de station ;(")
+                        return
+                    station = split[1]
+                    self.msg(self.channel, tan(station))
                 elif function == 'cours':
                     self.msg(self.channel, ics())
                 elif function == 'shine':
