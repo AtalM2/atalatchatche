@@ -65,6 +65,7 @@ class Atalatchatche(irc.IRCClient):
                     self.msg(self.channel,
                              ("Je comprends les commandes:\n"
                               "- bow :            je fais la carpette\n"
+                              "- spit :           je défends mon maître\n"
                               "- bicloo station : je donne des infos "
                               "sur la station donnée en arg "
                               "- tan station : je donne des infos "
@@ -81,6 +82,12 @@ class Atalatchatche(irc.IRCClient):
                               "intéressants"))
                 elif function == 'bow':
                     self.describe(self.channel, "s'incline")
+                elif function == 'spit':
+                    if len(split) < 2:
+                        self.msg(self.channel,
+                                 "j'ai besoin d'une cible ;(")
+                        return
+                    self.describe(self.channel, "crache sur " + split[1])
                 elif function == 'bicloo':
                     if len(split) < 2:
                         self.msg(self.channel,
