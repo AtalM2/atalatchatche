@@ -77,6 +77,8 @@ class Atalatchatche(irc.IRCClient):
                               "/Consultez-le-plan\n"
                               "- cours :          je donne des infos "
                               "sur le prochain cours qui aura lieu\n"
+                              "- garderie :       comme cours mais en "
+                              "moins bien\n"
                               "- shine :          je vous éblouis "
                               "en racontant des trucs super "
                               "intéressants"))
@@ -103,7 +105,9 @@ class Atalatchatche(irc.IRCClient):
                     station = split[1]
                     self.msg(self.channel, tan(station))
                 elif function == 'cours':
-                    self.msg(self.channel, ics())
+                    self.msg(self.channel, ics('g78125'))
+                elif function == 'garderie':
+                    self.msg(self.channel, ics('g18535'))
                 elif function == 'shine':
                     self.msg(self.channel, fortune_teller())
 

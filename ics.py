@@ -16,11 +16,11 @@ def read_credentials():
         return data[0], data[1]
 
 
-def ics():
+def ics(group):
     locale.setlocale(locale.LC_ALL, 'fr_FR.utf8')
     login, pw = read_credentials()
     request = requests.get(
-        'https://edt.univ-nantes.fr/sciences/g78125.ics',
+        'https://edt.univ-nantes.fr/sciences/' + group + '.ics',
         auth=(login, pw))
     if not 200 <= request.status_code < 300:
         return "Error status while retrieving the ics file."
